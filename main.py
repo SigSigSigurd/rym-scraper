@@ -11,10 +11,27 @@ def sub(arg: string, comm: string):
 
 def artist(arg: string):
     a = sub(arg,"artist ")
-    print(rym.sArtistTop(a, 0))
+    n = re.search(r'\-\d*', a)
+    if re.sub(r'\s', '', a)=="":
+        print("Filler!")
+    else:
+        if n==None:
+            x = 0
+            b = rym.artists(a)
+            if len(b)>1:
+                print("Did you mean:")
+                i = 0
+                for y in b:
+                    i+=1
+                    z = y.find('b', first=True)
+                    print(str(i)+". "+z.text)
+                print ("Specify with -# flag!")
+        else:
+            x = int(n.group()[1:len(n.group())])
+            print(rym.artist(a, x))
 
-def null():
-    pass
+def null(arg):
+    print("The command: \'"+arg+"\' does not exist!")
 
 #handles inputs
 def comm(arg: string):
@@ -25,18 +42,18 @@ def comm(arg: string):
     for i in d.keys():
         r = r'^'+re.escape(i)
         x = re.search(r, arg)
-        if x!=None:
-            c = d.get(x.group())
-            return c
+        c = d.get(x.group()) if x!=None else null
+        return c
 
 class Main:
 
     def main():
+        #main loop
+        print("RYM Scraper built by Tatsu Eliason")
         while True:
-            i = input(">")
+            i = input("\n>")
             c = comm(i)
-            if c!=None:
-                c(i)
+            c(i)
 
     if __name__ == "__main__":
         main()
